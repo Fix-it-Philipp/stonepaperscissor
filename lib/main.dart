@@ -146,8 +146,7 @@ class _HotSeatGameState extends State<HotSeatGame> {
         result += "";
     }
 
-    result += user2input.isEmpty ? "" : " gewählt!\n";
-    result += user2input.isEmpty ? "" : "Spieler 2 hat ";
+    result += user2input.isEmpty ? "" : " gewählt!\nSpieler 2 hat ";
 
     switch (user2input) {
       case "scissor":
@@ -353,7 +352,7 @@ class _ComputerGameState extends State<ComputerGame> {
             GameButton(id: 'scissor'),
             GameButton(id: 'paper'),
             GameButton(id: 'stone'),
-            Text(_returnFight(), style: const TextStyle(fontSize: 20.0)),
+            Text((userinput.isNotEmpty? _returnFight() : ""), style: const TextStyle(fontSize: 20.0)),
           ],
         ),
       ),
