@@ -104,8 +104,7 @@ class HotSeatGame extends StatefulWidget {
 class _HotSeatGameState extends State<HotSeatGame> {
   String userinput = "";
   String user2input = "";
-  final List<String> _input = ["scissor", "stone", "paper"];
-  var rng = Random();
+  List<String> _input = ["scissor", "stone", "paper"];
 
   @override
   Widget build(BuildContext context) {
@@ -119,39 +118,9 @@ class _HotSeatGameState extends State<HotSeatGame> {
           // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text("\nSpieler ${userinput.isEmpty ? "1" : (user2input.isEmpty? "2" : "1")},\nwähle deine Waffe!", style: TextStyle(fontSize: 25.0)),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  if (userinput.isEmpty) userinput = 'scissor';
-                  else user2input = 'scissor';
-                });
-              },
-              icon: const ImageIcon(AssetImage("assets/images/scissors.png"),
-                  size: 150),
-              tooltip: "Schere",
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  if (userinput.isEmpty) userinput = 'paper';
-                  else user2input = 'paper';
-                });
-              },
-              icon: const ImageIcon(AssetImage("assets/images/hand-paper.png"),
-                  size: 150),
-              tooltip: "Papier",
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  if (userinput.isEmpty) userinput = 'stone';
-                  else user2input = 'stone';
-                });
-              },
-              icon: const ImageIcon(AssetImage("assets/images/raise-hand.png"),
-                  size: 150),
-              tooltip: "Stein",
-            ),
+            GameButton(id: _input[0]),
+            GameButton(id: _input[1]),
+            GameButton(id: _input[2]),
             Text(_returnFight(), style: const TextStyle(fontSize: 20.0)),
           ],
         ),
@@ -222,6 +191,43 @@ class _HotSeatGameState extends State<HotSeatGame> {
     }
     return result;
   }
+
+  IconButton GameButton({required String id}) {
+    final String img;
+    final String tip;
+
+    switch (id) {
+      case 'scissor':
+        img = "assets/images/scissors.png";
+        tip = "Schere";
+        break;
+      case 'paper':
+        img = "assets/images/hand-paper.png";
+        tip = "Papier";
+        break;
+      case 'stone':
+        img = "assets/images/raise-hand.png";
+        tip = "Stein";
+        break;
+      default:
+        img = "";
+        tip = "";
+    }
+    return IconButton(
+      onPressed: () {
+        setState(() {
+          if (userinput.isEmpty) userinput = id;
+          else user2input = id;
+          _input.shuffle();
+        });
+      },
+      icon: ImageIcon(
+          AssetImage(img),
+          size: 150
+      ),
+      tooltip: tip,
+    );
+  }
 }
 
 class ComputerGame extends StatefulWidget {
@@ -239,16 +245,9 @@ class _ComputerGameState extends State<ComputerGame> {
   final List<String> _input = ["scissor", "stone", "paper"];
   var rng = Random();
 
-  _fight({required String userinput}) {
-    setState(() {
-      this.userinput = userinput;
-      cpuinput = _input[rng.nextInt(3)];
-    });
-  }
-
   String _returnFight() {
     String result = userinput.isEmpty ? "" : "Du hast ";
-
+    cpuinput = _input[rng.nextInt(3)];
     switch (userinput) {
       case "scissor":
         result += "Schere";
@@ -298,8 +297,45 @@ class _ComputerGameState extends State<ComputerGame> {
       else if (cpuinput == "paper") result += "Du hast verloren!";
       else result += "Du hast gewonnen!";
     }
-
+    if (userinput.isNotEmpty && cpuinput.isNotEmpty) {
+      userinput = "";
+      cpuinput = "";
+    }
     return result;
+  }
+
+  IconButton GameButton({required String id}) {
+    final String img;
+    final String tip;
+    switch (id) {
+      case 'scissor':
+        img = "assets/images/scissors.png";
+        tip = "Schere";
+        break;
+      case 'paper':
+        img = "assets/images/hand-paper.png";
+        tip = "Papier";
+        break;
+      case 'stone':
+        img = "assets/images/raise-hand.png";
+        tip = "Stein";
+        break;
+      default:
+        img = "";
+        tip = "";
+    }
+    return IconButton(
+      onPressed: () {
+        setState(() {
+          if (userinput.isEmpty) userinput = id;
+        });
+      },
+      icon: ImageIcon(
+          AssetImage(img),
+          size: 150
+      ),
+      tooltip: tip,
+    );
   }
 
   @override
@@ -314,36 +350,9 @@ class _ComputerGameState extends State<ComputerGame> {
           //mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text("\nWähle deine Waffe!", style: TextStyle(fontSize: 25.0)),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  _fight(userinput: 'scissor');
-                });
-              },
-              icon: const ImageIcon(AssetImage("assets/images/scissors.png"),
-                  size: 150),
-              tooltip: "Schere",
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  _fight(userinput: 'paper');
-                });
-              },
-              icon: const ImageIcon(AssetImage("assets/images/hand-paper.png"),
-                  size: 150),
-              tooltip: "Papier",
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  _fight(userinput: 'stone');
-                });
-              },
-              icon: const ImageIcon(AssetImage("assets/images/raise-hand.png"),
-                  size: 150),
-              tooltip: "Stein",
-            ),
+            GameButton(id: 'scissor'),
+            GameButton(id: 'paper'),
+            GameButton(id: 'stone'),
             Text(_returnFight(), style: const TextStyle(fontSize: 20.0)),
           ],
         ),
