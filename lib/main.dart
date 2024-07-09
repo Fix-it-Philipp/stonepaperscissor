@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() {
   runApp(const MyApp());
@@ -185,6 +186,9 @@ class _HotSeatGameState extends State<HotSeatGame> {
     }
 
     if (userinput.isNotEmpty && user2input.isNotEmpty) {
+      if ((userinput == 'stone' && user2input == 'paper') || (userinput == 'paper' && user2input == 'stone')) PlaySound('audio/paper-wraps-rock.mp3');
+      if ((userinput == 'stone' && user2input == 'scissor') || (userinput == 'scissor' && user2input == 'stone')) PlaySound('audio/rock-hit-metal.mp3');
+      if ((userinput == 'paper' && user2input == 'scissor') || (userinput == 'scissor' && user2input == 'paper')) PlaySound('audio/scissor-cut-paper.mp3');
       userinput = "";
       user2input = "";
     }
@@ -226,6 +230,11 @@ class _HotSeatGameState extends State<HotSeatGame> {
       ),
       tooltip: tip,
     );
+  }
+
+  Future<void> PlaySound(String audioPath) async{
+    final player = AudioPlayer();
+    await player.play(AssetSource(audioPath));
   }
 }
 
@@ -297,9 +306,13 @@ class _ComputerGameState extends State<ComputerGame> {
       else result += "Du hast gewonnen!";
     }
     if (userinput.isNotEmpty && cpuinput.isNotEmpty) {
+      if ((userinput == 'stone' && cpuinput == 'paper') || (userinput == 'paper' && cpuinput == 'stone')) PlaySound('audio/paper-wraps-rock.mp3');
+      if ((userinput == 'stone' && cpuinput == 'scissor') || (userinput == 'scissor' && cpuinput == 'stone')) PlaySound('audio/rock-hit-metal.mp3');
+      if ((userinput == 'paper' && cpuinput == 'scissor') || (userinput == 'scissor' && cpuinput == 'paper')) PlaySound('audio/scissor-cut-paper.mp3');
       userinput = "";
       cpuinput = "";
     }
+
     return result;
   }
 
@@ -358,4 +371,11 @@ class _ComputerGameState extends State<ComputerGame> {
       ),
     );
   }
+
+  Future<void> PlaySound(String audioPath) async{
+    final player = AudioPlayer();
+    await player.play(AssetSource(audioPath));
+  }
 }
+
+
